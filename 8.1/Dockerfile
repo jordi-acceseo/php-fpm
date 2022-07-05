@@ -37,3 +37,5 @@ COPY php.ini /usr/local/etc/php/php.ini
 RUN usermod -u 1000 www-data
 
 COPY --from=composer:2.3 /usr/bin/composer /usr/bin/composer
+
+USER www-data
