@@ -21,7 +21,9 @@ RUN apt-get update && apt-get install -y \
 # php-ext zip
     libzip-dev \
 # composer
-    zip
+    zip \
+# https://symfony.com/blog/fast-smart-flex-recipe-upgrades-with-recipes-update#hello-recipes-update
+    git
 
 RUN docker-php-ext-configure gd --enable-gd --with-webp --with-jpeg \
     && docker-php-ext-configure exif \
