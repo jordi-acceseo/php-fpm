@@ -42,5 +42,3 @@ COPY --from=composer:2.3 /usr/bin/composer /usr/bin/composer
 
 RUN mkdir -p /var/www/.composer \
     && chown www-data:www-data /var/www/.composer
-
-USER www-data
