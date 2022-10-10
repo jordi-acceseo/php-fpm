@@ -23,12 +23,14 @@ RUN apt-get update && apt-get install -y \
 # composer
     zip \
 # https://symfony.com/blog/fast-smart-flex-recipe-upgrades-with-recipes-update#hello-recipes-update
-    git
+    git \
+#php-ext pgsql
+    libpq-dev
 
 RUN docker-php-ext-configure gd --enable-gd --with-webp --with-jpeg \
     && docker-php-ext-configure exif \
     && docker-php-ext-configure intl \
-    && docker-php-ext-install gd exif intl mysqli pdo_mysql zip
+    && docker-php-ext-install gd exif intl mysqli pdo_mysql zip pgsql pdo_pgsql
 
 RUN pecl install xdebug-3.1.4 \
     && docker-php-ext-enable xdebug
