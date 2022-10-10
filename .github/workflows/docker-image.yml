@@ -28,4 +28,6 @@ jobs:
         with:
           context: ${{ matrix.version }}
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/php-fpm:${{ matrix.version }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/php-fpm:${{ matrix.version }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/php-fpm:${{ matrix.version }}-${{ github.sha }}
