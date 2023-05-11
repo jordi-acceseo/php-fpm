@@ -40,8 +40,8 @@ RUN docker-php-ext-configure gd --enable-gd --with-webp --with-jpeg \
 RUN pecl install xdebug-3.2.0 \
     && docker-php-ext-enable xdebug
 
-COPY xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
-COPY php.ini /usr/local/etc/php/php.ini
+COPY xdebug.ini $PHP_INI_DIR/conf.d/xdebug.ini
+COPY php.ini $PHP_INI_DIR/php.ini
 
 RUN usermod -u 1000 www-data
 
