@@ -47,5 +47,7 @@ RUN usermod -u 1000 www-data
 
 COPY --from=composer/composer:2.5.1-bin /composer /usr/bin/composer
 
+COPY --from=wordpress:cli-2.7.1-php8.0 /usr/local/bin/wp /usr/bin/wp
+
 RUN mkdir -p /var/www/.composer \
     && chown www-data:www-data /var/www/.composer
