@@ -37,7 +37,7 @@ RUN docker-php-ext-configure gd --enable-gd --with-webp --with-jpeg \
     && docker-php-ext-configure intl \
     && docker-php-ext-install gd exif intl mysqli pdo_mysql zip pgsql pdo_pgsql
 
-RUN pecl install xdebug-3.2.0 \
+RUN pecl install xdebug-3.3.1 \
     && docker-php-ext-enable xdebug
 
 COPY xdebug.ini $PHP_INI_DIR/conf.d/xdebug.ini
