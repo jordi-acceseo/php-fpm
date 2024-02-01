@@ -1,11 +1,11 @@
 FROM php:8.1.27-fpm
 
-LABEL org.opencontainers.image.title=PHP-FPM
-LABEL org.opencontainers.image.description=Opinionated PHP-FPM container for development
+LABEL org.opencontainers.image.title="PHP-FPM"
+LABEL org.opencontainers.image.description="Opinionated PHP-FPM container for development"
 LABEL org.opencontainers.image.version=1.0.0
-LABEL org.opencontainers.image.authors=acceseo Projects S.L.
-LABEL org.opencontainers.image.url=https://github.com/acceseo/php-fpm
-LABEL org.opencontainers.image.licenses=MIT License
+LABEL org.opencontainers.image.authors="acceseo Projects S.L."
+LABEL org.opencontainers.image.url="https://github.com/acceseo/php-fpm"
+LABEL org.opencontainers.image.licenses="MIT License"
 
 ENV PHP_UPLOAD_MAX_FILESIZE=32M
 ENV PHP_POST_MAX_SIZE=32M
