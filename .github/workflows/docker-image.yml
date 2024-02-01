@@ -17,6 +17,10 @@ jobs:
         name: Checkout
         uses: actions/checkout@v2
       -
+        name: Find the image version
+        run: |
+          echo "DOCKER_IMAGE_VERSION=$(grep 'LABEL org.opencontainers.image.version=' ${{ matrix.version }}/Dockerfile | cut -d '=' -f2)" >> $GITHUB_ENV
+      -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       -
@@ -37,4 +41,4 @@ jobs:
           platforms: 'amd64,arm64'
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/php-fpm:${{ matrix.version }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/php-fpm:${{ matrix.version }}-${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/php-fpm:${{ matrix.version }}-${{ env.DOCKER_IMAGE_VERSION }}
