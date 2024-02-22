@@ -37,7 +37,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ${{ matrix.version }}
-          push: true
+          push: ${{ github.ref == 'refs/heads/main' }}
           platforms: 'amd64,arm64'
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/php-fpm:${{ matrix.version }}
