@@ -1,0 +1,12 @@
+version: 2
+updates:
+  - package-ecosystem: "docker"
+    directories:
+      - "/8.1"
+      - "/8.2"
+      - "/8.3"
+    schedule:
+      interval: "daily"
+    ignore:
+      - dependency-name: "php"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
