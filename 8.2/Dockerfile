@@ -1,4 +1,4 @@
-FROM php:8.2.22-fpm
+FROM php:8.2.23-fpm
 
 LABEL org.opencontainers.image.title="PHP-FPM"
 LABEL org.opencontainers.image.description="Opinionated PHP-FPM container for development"
