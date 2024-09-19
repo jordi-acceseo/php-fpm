@@ -13,6 +13,7 @@ jobs:
           version: ['7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3']
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v4
     - name: Get changed files
       id: changed-files
       uses: tj-actions/changed-files@v45
