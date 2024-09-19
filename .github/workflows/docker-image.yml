@@ -24,7 +24,7 @@ jobs:
     - name: generate array
       if: steps.changed-files.outputs.any_changed == 'true'
       run: |
-        echo ${{ matrix.version }} >> "$GITHUB_OUTPUT"
+        echo "${{ matrix.version }}" >> "$GITHUB_OUTPUT"
   build:
     needs: [generate-matrix]
     strategy:
