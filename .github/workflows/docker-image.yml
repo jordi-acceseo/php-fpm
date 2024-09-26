@@ -24,15 +24,23 @@ jobs:
         files: |
           ${{ matrix.version }}/**
           .github/**
-    - name: generate array
+    - name: generate filtered array file
       if: steps.changed-files.outputs.any_changed == 'true'
       run: |
-        echo "x=${{ matrix.version }}" >> $GITHUB_OUTPUT
+        ELEMENTO=${{ matrix.version }}
+        echo "${ELEMENTO}" >> elementos_filtrados.txt
+    - name: asd
+      run: |
+        if [ -f elementos_filtrados.txt ]; then
+          FILTRADOS=$(cat elementos_filtrados.txt | jq -R -s -c 'split("\n")[:-1]')
+        fi
+        echo "Matriz filtrada: $FILTRADOS"
+        echo "::set-output name=matriz_filtrada::$FILTRADOS"
   build:
     needs: [generate-matrix]
     strategy:
         matrix:
-          version: "${{ needs.generate-matrix.outputs.x }}"
+          elementos: ${{ fromJson(needs.generate-matrix.outputs.matriz_filtrada) }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -40,4 +48,4 @@ jobs:
 
       - name: Echo php version
         run: |
-          echo ${{ matrix.version }}
+          echo ${{ matrix.elementos }}
