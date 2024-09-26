@@ -34,8 +34,7 @@ jobs:
         if [ -f elementos_filtrados.txt ]; then
           FILTRADOS=$(cat elementos_filtrados.txt | jq -R -s -c 'split("\n")[:-1]')
         fi
-        echo "Matriz filtrada: $FILTRADOS"
-        echo "::set-output name=matriz_filtrada::$FILTRADOS"
+        echo "matriz_filtrada=${FILTRADOS}" >> $GITHUB_OUTPUT
   build:
     needs: [generate-matrix]
     strategy:
