@@ -32,7 +32,7 @@ jobs:
     needs: [generate-matrix]
     strategy:
         matrix:
-          version: ["${{ needs.generate-matrix.outputs.x }}"]
+          version: "${{ needs.generate-matrix.outputs.x }}"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
