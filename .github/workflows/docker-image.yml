@@ -1,5 +1,8 @@
 name: Docker Image CI
 
+#env:
+#  PHP_VERSIONS: []
+
 on:
   push:
     branches: [ main ]
@@ -24,12 +27,12 @@ jobs:
     - name: generate array
       if: steps.changed-files.outputs.any_changed == 'true'
       run: |
-        echo "${{ matrix.version }}" >> "$GITHUB_OUTPUT"
+        echo "${{ matrix.version }}" >> $GITHUB_OUTPUT
   build:
     needs: [generate-matrix]
     strategy:
         matrix:
-          version: ${{ toJSON(needs.generate-matrix.outputs) }}
+          version: ["${{ needs.generate-matrix.outputs }}"]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
