@@ -27,12 +27,12 @@ jobs:
     - name: generate array
       if: steps.changed-files.outputs.any_changed == 'true'
       run: |
-        echo "${{ matrix.version }}" >> $GITHUB_OUTPUT
+        echo "x=${{ matrix.version }}" >> $GITHUB_OUTPUT
   build:
     needs: [generate-matrix]
     strategy:
         matrix:
-          version: ["${{ needs.generate-matrix.outputs }}"]
+          version: ["${{ needs.generate-matrix.outputs.x }}"]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
