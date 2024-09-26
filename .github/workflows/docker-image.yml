@@ -15,6 +15,8 @@ jobs:
         matrix:
           version: ['7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3']
     runs-on: ubuntu-latest
+    outputs:
+      matriz_filtrada: ${{ steps.generate-filtered-matrix.outputs.matriz_filtrada }}
     steps:
     - uses: actions/checkout@v4
     - name: Get changed files
@@ -29,7 +31,8 @@ jobs:
       run: |
         ELEMENTO=${{ matrix.version }}
         echo "${ELEMENTO}" >> elementos_filtrados.txt
-    - name: asd
+    - name: Generate filtered matrix
+      id: generate-filtered-matrix
       run: |
         if [ -f elementos_filtrados.txt ]; then
           FILTRADOS=$(cat elementos_filtrados.txt | jq -R -s -c 'split("\n")[:-1]')
