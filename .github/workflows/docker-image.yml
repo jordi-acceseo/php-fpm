@@ -1,8 +1,5 @@
 name: Docker Image CI
 
-#env:
-#  PHP_VERSIONS: []
-
 on:
   push:
     branches: [ main ]
@@ -10,44 +7,46 @@ on:
     branches: [ main ]
 
 jobs:
-  generate-matrix:
+  build:
     strategy:
         matrix:
           version: ['7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3']
     runs-on: ubuntu-latest
-    outputs:
-      matriz_filtrada: ${{ steps.generate-filtered-matrix.outputs.matriz_filtrada }}
     steps:
-    - uses: actions/checkout@v4
-    - name: Get changed files
-      id: changed-files
-      uses: tj-actions/changed-files@v45
-      with:
-        files: |
-          ${{ matrix.version }}/**
-          .github/**
-    - name: generate filtered array file
-      if: steps.changed-files.outputs.any_changed == 'true'
-      run: |
-        ELEMENTO=${{ matrix.version }}
-        echo "${ELEMENTO}" >> elementos_filtrados.txt
-    - name: Generate filtered matrix
-      id: generate-filtered-matrix
-      run: |
-        if [ -f elementos_filtrados.txt ]; then
-          FILTRADOS=$(cat elementos_filtrados.txt | jq -R -s -c 'split("\n")[:-1]')
-        fi
-        echo "matriz_filtrada=${FILTRADOS}" >> $GITHUB_OUTPUT
-  build:
-    needs: [generate-matrix]
-    strategy:
-        matrix:
-          elementos: ${{ fromJson(needs.generate-matrix.outputs.matriz_filtrada) }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Echo php version
-        run: |
-          echo ${{ matrix.elementos }}
+      - uses: actions/checkout@v4
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v45
+        with:
+          files: |
+            ${{ matrix.version }}/**
+            .github/**
+      - name: Set up QEMU
+        if: steps.changed-files.outputs.any_changed == 'true'
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        if: steps.changed-files.outputs.any_changed == 'true'
+        uses: docker/setup-buildx-action@v2
+      - name: Login to DockerHub
+        if: steps.changed-files.outputs.any_changed == 'true'
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push
+        if: steps.changed-files.outputs.any_changed == 'true'
+        uses: docker/build-push-action@v2
+        with:
+          context: ${{ matrix.version }}
+          push: ${{ github.ref == 'refs/heads/main' }}
+          platforms: 'amd64,arm64'
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/php-fpm:${{ matrix.version }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/php-fpm:${{ matrix.version }}-${{ env.DOCKER_IMAGE_VERSION }}
+      - name: Notify container release
+        if: github.ref == 'refs/heads/main' && steps.changed-files.outputs.any_changed == 'true'
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: '${{ secrets.ZAPIER_WEBHOOK }}'
+          method: 'POST'
+          data: '{"message": "🐳📦🐘 Imagen ${{ secrets.DOCKERHUB_USERNAME }}/php-fpm:${{ matrix.version }}-${{ env.DOCKER_IMAGE_VERSION }} disponible en Docker Hub."}'
